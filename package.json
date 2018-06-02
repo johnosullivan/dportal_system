@@ -1,0 +1,7 @@
+{
+  "name": "dportal_system",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "John O'Sullivan",
+  "license": "MIT"
+}
