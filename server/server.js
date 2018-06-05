@@ -11,6 +11,7 @@ var { authenticate } = require('./middleware/authenticate');
 
 // The controllers from the different routes
 const UserController = require("./controllers/UserController");
+const APIGenerator = require("./controllers/APIGenerator");
 
 // Creates an express app
 var app = express();
@@ -24,6 +25,9 @@ app.get('/users/me', authenticate, UserController.getUser);
 app.post('/users/login', UserController.userLogin);
 // DELETE /users/me/token
 app.delete('/users/me/token', authenticate, UserController.deleteToken);
+
+app.post('/generatorkey', APIGenerator.createKey);
+
 // Begins the app listening on port
 app.listen(port, () => { console.log(`dportal running on port: ${port}.`); });
 
