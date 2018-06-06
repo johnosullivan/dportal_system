@@ -29,6 +29,13 @@ app.delete('/users/me/token', authenticate, UserController.deleteToken);
 app.post('/generatorkey', APIGenerator.createKey);
 
 // Begins the app listening on port
-app.listen(port, () => { console.log(`dportal running on port: ${port}.`); });
+var server = app.listen(port, () => {
+  //console.log(`dportal running on port: ${port}.`);
+});
 
-module.exports = { app };
+function shutdown(done) {
+  //console.log(`dportal has shutdown`);
+  server.close(done);
+}
+
+module.exports = { app, shutdown };
