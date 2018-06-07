@@ -36,8 +36,6 @@ class UserController {
             }).catch(function (error) {
               res.status(400).send(err);
             });
-;
-
 
         });
       });

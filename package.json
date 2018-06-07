@@ -5,8 +5,11 @@
   "author": "John O'Sullivan",
   "license": "MIT",
   "scripts": {
-    "start": "node server/server.js",
-    "tests": "export NODE_ENV=test && ./node_modules/mocha/bin/mocha tests/**/*.test.js"
+    "dev": "export NODE_ENV=development && node server/server.js",
+    "prod": "export NODE_ENV=production && node server/server.js",
+    "test": "export NODE_ENV=test && ./node_modules/mocha/bin/mocha tests/**/*.test.js",
+    "pre_test": "export NODE_ENV=test && node_modules/.bin/sequelize db:migrate",
+    "post_test": "export NODE_ENV=test && node_modules/.bin/sequelize db:migrate:undo"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
