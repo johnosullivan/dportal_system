@@ -1,4 +1,4 @@
-const MODELS = require('../models');
+const { User } = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -10,7 +10,7 @@ class UserController {
           bcrypt.hash(req.body.password, salt, (err, hash) => {
 
             // Create a new user
-            MODELS.User.create({
+            User.create({
               firstName: req.body.firstName,
               lastName: req.body.lastName,
               email: req.body.email,
@@ -24,7 +24,7 @@ class UserController {
               var token = jwt.sign({access, id: user.id}, "process.env.JWT_SECRET");
               user.tokens = user.tokens.concat([{access, token}]);
 
-              MODELS.User.update({
+              User.update({
                 tokens: user.tokens
               },{
                 where: { id: user.id }
@@ -33,7 +33,10 @@ class UserController {
                 res.json(user);
               });
 
+            }).catch(function (error) {
+              res.status(400).send(err);
             });
+;
 
 
         });
@@ -57,19 +60,19 @@ class UserController {
         email: req.body.email,
         password: req.body.password
       };
-      MODELS.User.find({
+      User.find({
         where: { email: creds.email }
       }).then(function(user) {
         var user_profile = user.dataValues;
         bcrypt.compare(creds.password, user_profile.password, (err, resp) => {
-            if (res) {
+            if (resp) {
 
               var access = 'auth';
 
               var token = jwt.sign({access, id: user.id}, "process.env.JWT_SECRET");
               user.tokens = user.tokens.concat([{access, token}]);
 
-              MODELS.User.update({
+              User.update({
                 tokens: user.tokens
               },{
                 where: { id: user.id }
@@ -78,6 +81,8 @@ class UserController {
                 res.json(user);
               });
 
+            } else {
+              res.status(400).send(err);
             }
         });
 
@@ -98,7 +103,7 @@ class UserController {
         }
       }
 
-      MODELS.User.update({
+      User.update({
         tokens: tokens
       },{
         where: { id: req.user.id }
