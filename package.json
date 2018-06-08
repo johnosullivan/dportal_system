@@ -9,7 +9,7 @@
     "prod": "export NODE_ENV=production && node server/server.js",
     "test": "export NODE_ENV=test && ./node_modules/mocha/bin/mocha tests/**/*.test.js",
     "pre_test": "export NODE_ENV=test && node_modules/.bin/sequelize db:migrate",
-    "post_test": "export NODE_ENV=test && node_modules/.bin/sequelize db:migrate:undo"
+    "post_test": "export NODE_ENV=test && node_modules/.bin/sequelize db:migrate:undo:all"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
