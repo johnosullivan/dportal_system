@@ -13,6 +13,16 @@ var { authenticate } = require('./middleware/authenticate');
 const UserController = require("./controllers/UserController");
 const APIGenerator = require("./controllers/APIGenerator");
 
+var apm = require('elastic-apm-node').start({
+  serviceName: 'dportal_system',
+  secretToken: '',
+  serverUrl: '',
+});
+
+var err = new Error('Ups, something broke!')
+
+apm.captureError(err)
+
 // Creates an express app
 var app = express();
 // Sets the body parser
