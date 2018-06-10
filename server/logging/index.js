@@ -2,7 +2,7 @@ const apppackage = require('../../package.json');
 const CONFIGS = require('../../config/server');
 var winston_lib = require('winston');
 
-const configLogging = () => {
+const startLogging = () => {
   global.apm = require('elastic-apm-node').start({
     serviceName: apppackage.name + '_' + process.env.NODE_ENV,
     secretToken: CONFIGS.apm.secretToken,
@@ -17,11 +17,16 @@ const configLogging = () => {
   global.winston = winston_lib;
 }
 
+const stopLogging = () => {
+  global.winston.remove(global.winston.transports.Logstash);
+}
+
 var winston = () => { return global.winston; }
 var apm = () => { return global.apm; }
 
 module.exports = {
-  configLogging,
+  startLogging,
+  stopLogging,
   winston,
   apm
 }

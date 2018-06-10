@@ -1,5 +1,5 @@
-var { configLogging, winston, apm } = require("./logging");
-configLogging();
+var { startLogging, stopLogging, winston, apm } = require("./logging");
+startLogging();
 
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -18,14 +18,6 @@ const APIGenerator = require("./controllers/APIGenerator");
 
 // Creates an express app
 var app = express();
-
-app.get('/test', function (req, res) {
-  winston().log('info', 'hey hey');
-  var err = new Error('heu heu')
-  apm().captureError(err)
-  res.send('Hello World!');
-})
-
 // Sets the body parser
 app.use(bodyParser.json());
 // POST /users
@@ -46,6 +38,7 @@ var server = app.listen(port, () => {
 
 function shutdown(done) {
   //console.log(`dportal has shutdown`);
+  stopLogging();
   server.close(done);
 }
 
