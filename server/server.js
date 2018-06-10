@@ -1,4 +1,5 @@
-require("./logging").startLogging();
+var { configLogging, winston, apm } = require("./logging");
+configLogging();
 
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -15,24 +16,18 @@ var { authenticate } = require('./middleware/authenticate');
 const UserController = require("./controllers/UserController");
 const APIGenerator = require("./controllers/APIGenerator");
 
-var err = new Error('Ups, something broke!')
-
-//apm.captureError(err)
-
 // Creates an express app
 var app = express();
 
 app.get('/test', function (req, res) {
+  winston().log('info', 'hey hey');
+  var err = new Error('heu heu')
+  apm().captureError(err)
   res.send('Hello World!');
-  //console.log(global.apm);
-  var err = new Error('/123test')
-  global.apm.captureError(err)
 })
 
 // Sets the body parser
-//app.use(bodyParser.json());
-
-
+app.use(bodyParser.json());
 // POST /users
 app.post('/users', UserController.postUser);
 // GET /users/me (Private route)
@@ -41,7 +36,6 @@ app.get('/users/me', authenticate, UserController.getUser);
 app.post('/users/login', UserController.userLogin);
 // DELETE /users/me/token
 app.delete('/users/me/token', authenticate, UserController.deleteToken);
-
 
 app.get('/generatorkey', APIGenerator.createKey);
 
